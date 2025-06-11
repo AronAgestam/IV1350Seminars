@@ -1,17 +1,22 @@
 package main.integration;
 
-import main.model.*;
-
 public class PrinterHandler {
-
-	private Sale receiptInformation;
-
+	
+	/**
+	 * PrinterHandler serves as an interface between the system and an imagined external printer.
+	 * Its only method takes a receipt-String input and outputs an imagined paper receipt. 
+	 */
 	public PrinterHandler() {
 	}
 
-	public void printReceipt(Sale saleInformation) {
-		System.out.println(saleInformation);
-		this.receiptInformation = saleInformation;
+	/**
+	 * String containing a receipt is "printed" out on imaginary paper. 
+	 * @param receipt - String containing the formatted receipt to be printed
+	 */
+	public void printReceiptPaper(String receipt) {
+		
+		// Prints Physical copy of the Receipt set as parameter, not represented in the program.  
+
 	}
 
 }

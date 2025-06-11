@@ -17,13 +17,23 @@ public class ControllerTest {
     }
         
     @Test
-    public void testDatabaseOfflineException(){
+    public void testDiscountDatabaseOfflineException(){
         try{
             controller.startSale();
             Item e = controller.addItem(2, 20);
-            controller.printAddItem(e);
-            controller.printCurrentTotals();
             controller.getDiscount(1000);
+            fail("DatabaseOfflineException not thrown!");
+            }
+        catch(ItemNotFoundException | DatabaseOfflineException exception){
+        }
+    }
+
+    @Test
+    public void testItemDatabaseOfflineException(){
+        try{
+            controller.startSale();
+            Item e = controller.addItem(1000, 20);
+            controller.getDiscount(1001);
             fail("DatabaseOfflineException not thrown!");
             }
         catch(ItemNotFoundException | DatabaseOfflineException exception){
@@ -34,7 +44,7 @@ public class ControllerTest {
     public void testItemNotFoundException(){
         try{
             controller.startSale();
-            Item f = controller.addItem(7, 20);
+            Item e = controller.addItem(7, 20);
             controller.getDiscount(1001);
             fail("ItemNotFoundException not thrown!");
             }
@@ -47,8 +57,6 @@ public class ControllerTest {
         try{
             controller.startSale();
             Item e = controller.addItem(2, 20);
-            controller.printAddItem(e);
-            controller.printCurrentTotals();
             controller.getDiscount(1001);
             }
         catch(ItemNotFoundException | DatabaseOfflineException exception){

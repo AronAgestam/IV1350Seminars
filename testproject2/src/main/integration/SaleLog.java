@@ -13,7 +13,7 @@ public class SaleLog {
 	}
 	
 	/**
-	 * Sends sale information to a Sale Log for logging. Sale Log not modelled.
+	 * Sends sale information to a Sale Log for logging. Sale Log only modelled as an ArrayList.
 	 * @param saleInfo
 	 */
 	public void addSaleToLog(Sale saleInfo) {

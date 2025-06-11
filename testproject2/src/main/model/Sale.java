@@ -1,6 +1,5 @@
 package main.model;
 
-import main.model.*;
 import main.integration.*;
 
 import java.time.LocalTime;
@@ -16,10 +15,10 @@ public class Sale {
 	private double changeAmount;
 	private ArrayList<Discount> discounts;
 
-		/**
-	* 
+    private ArrayList<SaleObserver> saleObservers; // Sale Observers should be in Sale
+
+	/**
 	* Constructs a Sale object and populates an empty Sale.
-	* 
 	*/
 	public Sale() {
         this.totalPrice = 0;
@@ -29,6 +28,8 @@ public class Sale {
         this.paymentAmount = 0;
         this.changeAmount = 0;
         this.discounts = new ArrayList<Discount>();
+
+		this.saleObservers = new ArrayList<SaleObserver>();	// Sale Observers should be in Sale
 	}
 
 	/**
@@ -63,22 +64,6 @@ public class Sale {
 		setTotalPrice(updatedTotalPrice);
 		setTotalVAT(updatedTotalVAT);
 	}
-    
-    /**
-     * @return String description of Sale, parameters ordered as in constructor.
-     */
-    @Override
-    public String toString() {
-        String itemListString = "";
-		String discountListString = "";
-        for(int i = 0; i<items.size(); i++){
-            itemListString += items.get(i).getItemDescription() + " " + items.get(i).getQuantity() + " x " + items.get(i).getPrice() + " " + items.get(i).getQuantity()*items.get(i).getPrice() + " SEK \n";
-        }
-		for(int i = 0; i<this.discounts.size(); i++){
-			discountListString += this.discounts.get(i) + "\n";
-		}
-        return "-----------Receipt Start-----------\nTime of Sale: " + this.time + "\n" + itemListString + "\nTotal: " + this.totalPrice + " SEK \nVAT: " + this.totalVAT + " SEK \n" + discountListString + "\nPayment: "+ this.paymentAmount + "\nChange: " + this.changeAmount + "\n------------Receipt End------------";
-    }
 
     /**
      * @return double return the totalPrice
@@ -139,10 +124,13 @@ public class Sale {
         return paymentAmount;
     }
     /**
-     * @param storeName the storeName to set
+     * Sets payment value when recieving a payment.
+     * Also calls updateObservers to update TotalRevenue. 
+     * @param payment The payment recieved
      */
     public void setPaymentAmount(double payment) {
         this.paymentAmount = payment;
+        this.updateObservers();
     }
 
     /**
@@ -170,5 +158,22 @@ public class Sale {
     public void addDiscounts(ArrayList<Discount> discounts) {
         this.discounts.addAll(discounts);
     }
-
+    
+	/**
+	 * Adds a new Observer.
+	 * @param newObserver
+	 */
+	public void addObserver(SaleObserver newObserver){
+		saleObservers.add(newObserver);
+	}
+    /**
+	 * Notifies Observers with total price of the current Sale.
+     * Should be called at the end of a Sale after recieving payment.
+     * Used by TotalRevenue-classes.
+	 */
+	public void updateObservers(){
+		for(int i = 0; i<saleObservers.size(); i++){
+			saleObservers.get(i).revenueUpdate(totalPrice);
+		}
+    }
 }

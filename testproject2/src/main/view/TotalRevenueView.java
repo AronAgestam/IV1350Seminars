@@ -4,7 +4,7 @@ import main.model.SaleObserver;
 /**
  * TotalRevenueView implements the interface SaleObserver.
  */
-class TotalRevenueView implements SaleObserver {
+public class TotalRevenueView implements SaleObserver {
     private double totalRevenue;
     
     /**
@@ -14,6 +14,6 @@ class TotalRevenueView implements SaleObserver {
     @Override
     public void revenueUpdate(double totalPrice){
         totalRevenue += totalPrice;
-        System.out.println("Total revenue: " + totalRevenue + "\n");
+        System.out.printf("Total revenue: %.2f SEK \n\n", totalRevenue);
     }
 }

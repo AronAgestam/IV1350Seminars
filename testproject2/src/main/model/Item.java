@@ -9,7 +9,7 @@ public class Item {
 	private int quantity = 0;
 
 	/**
-	 * 
+	 * Constructs an Item object. Allows setting quantity.
 	 * @param itemIdentifier
 	 * @param itemDescription
 	 * @param price
@@ -24,6 +24,13 @@ public class Item {
 		this.quantity = quantity;
 	}
 
+    /**
+	 * Constructs an Item object. Quantity is set to 1.
+	 * @param itemIdentifier
+	 * @param itemDescription
+	 * @param price
+	 * @param VAT
+	 */
     public Item(int itemIdentifier, String itemDescription,	double price, double VAT) {
         this.itemIdentifier = itemIdentifier;
         this.itemDescription = itemDescription;

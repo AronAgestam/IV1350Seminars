@@ -3,23 +3,14 @@ package main.integration;
 public class Discount {
 
 	private double discountSum;
-	private double discountPercentage;
+	private double discountFraction;
     private String discountDescription;
 
-	public Discount(double discountSum, double discountPercentage, String discountDescription)  {
+	public Discount(double discountSum, double discountFraction, String discountDescription)  {
         this.discountSum = discountSum;
-        this.discountPercentage = discountPercentage;
+        this.discountFraction = discountFraction;
         this.discountDescription = discountDescription;
 	}
-
-    /**
-     * @return String description of Discount.
-     */
-    @Override
-    public String toString() {
-        String discountString = "Discount: -" + discountSum + " (" + discountDescription + discountPercentage *100 +"%)";
-        return discountString;
-    }
 
     /**
      * @return double return the discountSum
@@ -35,18 +26,17 @@ public class Discount {
     }
 
     /**
-     * @return double return the discountPercentage
+     * @return double return the discountFraction
      */
-    public double getDiscountPercentage() {
-        return discountPercentage;
+    public double getDiscountFraction() {
+        return discountFraction;
     }
     /**
-     * @param discountPercentage the discountPercentage to set
+     * @param discountFraction the discountFraction to set
      */
-    public void setDiscountPercentage(double discountPercentage) {
-        this.discountPercentage = discountPercentage;
+    public void setDiscountFraction(double discountFraction) {
+        this.discountFraction = discountFraction;
     }
-
 
     /**
      * @return String return the discountDescription

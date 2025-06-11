@@ -1,12 +1,13 @@
 package main.controller;
 
 import java.io.*;
+import java.time.LocalTime;
 
 public class ExceptionLogger {
 
     private PrintWriter outputFile;
     /**
-     * Creates a new file with specified file name.
+     * Creates a new file with name "exceptions.txt".
      */
     public ExceptionLogger() {
         try{
@@ -16,12 +17,11 @@ public class ExceptionLogger {
         }
     }
     /**
-     * Prints output file with a specific String.
-     * @param totalPrice receives the total price of the sale
+     * Prints specified Exception to output file.
      */
-  
     public void logException(Exception exception){
-        this.outputFile.println(exception.getMessage());
+        this.outputFile.println("\n"+LocalTime.now());
+        this.outputFile.println("Exception:  "+exception.getMessage());
         exception.printStackTrace(outputFile);
     }
 }

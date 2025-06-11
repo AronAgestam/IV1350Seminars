@@ -47,7 +47,7 @@ public class DiscountHandlerTest {
         ArrayList<Discount> discounts = dh.searchDiscount(currentSale, 123); 
         assertEquals(1, discounts.size(), "Expected one discount");
         Discount disc1 = discounts.get(0);
-        assertEquals(0.04, disc1.getDiscountPercentage(), "Expected 4 percent discount for total cost over 200");
+        assertEquals(0.04, disc1.getDiscountFraction(), "Expected 4 percent discount for total cost over 200");
         assertEquals(40, disc1.getDiscountSum(), "Expected 4 percent discount for total cost over 200");
     }
     @Test
@@ -58,7 +58,7 @@ public class DiscountHandlerTest {
         ArrayList<Discount> discounts = dh.searchDiscount(currentSale, 1002); 
         assertEquals(1, discounts.size(), "Expected one discount");
         Discount disc1 = discounts.get(0);
-        assertEquals(0.06, disc1.getDiscountPercentage(), "Expected 5 percent discount for certain customerID");
+        assertEquals(0.06, disc1.getDiscountFraction(), "Expected 5 percent discount for certain customerID");
         assertEquals(3, disc1.getDiscountSum(), "Expected 5 percent discount for certain customerID");
     }
     @Test
@@ -69,7 +69,7 @@ public class DiscountHandlerTest {
         ArrayList<Discount> discounts = dh.searchDiscount(currentSale, 123); 
         assertEquals(1, discounts.size(), "Expected one discount");
         Discount disc1 = discounts.get(0);
-        assertEquals(0.20, disc1.getDiscountPercentage(), "Expected 20 percent discount on duplicate items");
+        assertEquals(0.20, disc1.getDiscountFraction(), "Expected 20 percent discount on duplicate items");
         assertEquals(8, disc1.getDiscountSum(), "Expected 20 percent discount on duplicate items");
     }
     
@@ -82,7 +82,7 @@ public class DiscountHandlerTest {
         ArrayList<Discount> discounts = dh.searchDiscount(currentSale, 1003); 
         assertEquals(3, discounts.size(), "Expected three discounts");
         Discount disc1 = discounts.get(0);
-        assertEquals(0.04, disc1.getDiscountPercentage(), "Expected 4 percent discount for total cost over 200");
+        assertEquals(0.04, disc1.getDiscountFraction(), "Expected 4 percent discount for total cost over 200");
         assertEquals(160, disc1.getDiscountSum(), "Expected 4 percent discount for total cost over 200");
     }
  

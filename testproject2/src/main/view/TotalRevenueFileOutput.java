@@ -20,12 +20,12 @@ public class TotalRevenueFileOutput implements SaleObserver {
         }
     }
     /**
-     * Prints output file with a specific String detailing the Total Revenue.
-     * @param totalPrice receives the total price of the sale
+     * Prints a line to output file with a specific String detailing the Total Revenue.
+     * @param totalPrice receives the total price of the sale (including VAT)
      */
     @Override
     public void revenueUpdate(double totalPrice){
         this.totalRevenue += totalPrice;
-        this.outputFile.println("Total Revenue: " + this.totalRevenue);
+        this.outputFile.printf("Total Revenue: %.2f SEK \n", this.totalRevenue);
     }
 }
