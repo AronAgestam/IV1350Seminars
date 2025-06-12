@@ -1,6 +1,5 @@
 package main.controller;
 import main.model.*;
-import main.view.*;
 import main.integration.*;
 import java.util.*;
 
@@ -29,8 +28,13 @@ public class Controller {
 
 		// Create Observer list to pass to each new Sale. Observers are preserved in Controller between Sales.
 		this.saleObservers = new ArrayList<SaleObserver>();
-		this.saleObservers.add(new TotalRevenueFileOutput());	
-		this.saleObservers.add(new TotalRevenueView());	
+	}
+	/**
+	 * Adds a new Observer.
+	 * @param newObserver
+	 */
+	public void addObserver(SaleObserver newObserver){
+		saleObservers.add(newObserver);
 	}
 	/**
 	 * Creates and saves a new Sale, also attaching the controllers Observers to Sale.
@@ -38,7 +42,7 @@ public class Controller {
 	public void startSale() {
 		this.currentSale = new Sale();
 
-		// Passes the controllers constant TotalRevenue-Observers to each new Sale.
+		// Passes the controllers preserved Observers to each new Sale.
 		for(int i = 0; i<saleObservers.size(); i++){
 			this.currentSale.addObserver(saleObservers.get(i));
 		}

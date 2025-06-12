@@ -1,6 +1,6 @@
 package main.integration;
 
-import main.model.Sale;
+import main.model.Sale; // Needs Sale class - could be removed if updateAccountingSystems is changed to receive extracted doubles.
 
 public class EASHandler {
 

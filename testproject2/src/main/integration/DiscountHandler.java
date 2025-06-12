@@ -2,7 +2,7 @@ package main.integration;
 
 import java.util.*;
 
-import main.model.*;
+import main.model.*; // Needs Item and Sale classes to decide/calculate Discounts.
 
 public class DiscountHandler {
 
@@ -18,6 +18,7 @@ public class DiscountHandler {
 	 * Edits the entered Sales totalPrice to the discounted price.
 	 * @param customerID - 1000 throws Exception, 1001:1005 gives extra discounts
 	 * @param saleInfo - the sale to APPLY discounts to
+	 * @return list of eligible/applied discounts
 	 * @throws DatabaseOfflineException originates here
      */	
 	public ArrayList<Discount> searchDiscount(Sale saleInfo, int customerID) throws DatabaseOfflineException{
@@ -58,12 +59,12 @@ public class DiscountHandler {
 		for(int i = 0; i<itemList.size(); i++){
 			if(itemList.get(i).getQuantity() >= 2){
 				double iPrice = itemList.get(i).getPrice();
-				double iNum = itemList.get(i).getQuantity();
+				int iNum = itemList.get(i).getQuantity();
 				String iInfo = itemList.get(i).getItemDescription();
 
 				discountRate = 0.20;
 				discountValue = iPrice * iNum * discountRate;
-				String desc = "Duplicate Item: "+iNum+" x "+iInfo+": -"+iPrice+ " x "+iNum+" x "+discountRate;
+				String desc = "Duplicate Item: "+iNum+" x "+iInfo+": - "+iPrice+ " x "+iNum+" x "+discountRate;
 				String descFull = "Discount: -" + String.format("%.2f",discountValue) + " SEK (-" + discountRate *100 +"%, " + desc + ")";
 				discountList.add(new Discount(discountValue, discountRate, descFull));
 			}
@@ -85,14 +86,14 @@ public class DiscountHandler {
 		if(totalPrice>=200){
 			discountRate = 0.04;
 			discountValue = totalPrice * discountRate;
-			String desc = "Total Cost over 200: -" + totalPrice + " x " + discountRate;
+			String desc = "Total Cost over 200: - " + totalPrice + " x " + discountRate;
 			String descFull = "Discount: -" + String.format("%.2f",discountValue) + " SEK (-" + discountRate *100 +"%, " + desc + ")";
 			return new Discount(discountValue, discountRate, descFull);
 		}
 		if(totalPrice>=100){
 			discountRate = 0.02;
 			discountValue = totalPrice * discountRate;
-			String desc = "Total Cost over 100: -" + totalPrice + " x " + discountRate;
+			String desc = "Total Cost over 100: - " + totalPrice + " x " + discountRate;
 			String descFull = "Discount: -" + discountValue + " SEK (-" + discountRate *100 +"%, " + desc + ")";
 			return new Discount(discountValue, discountRate, descFull);
 		}

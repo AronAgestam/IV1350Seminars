@@ -1,6 +1,6 @@
 package main.model;
 
-import main.integration.*;
+import main.integration.Discount; // Needs Disocunt Class to store discounts in Sale object.
 
 import java.time.LocalTime;
 import java.util.ArrayList;

@@ -1,5 +1,5 @@
 package main.integration;
-import main.model.*;
+import main.model.*; // Needs Item and Sale classes - could be reduced to Item if updateInventorySystem is changed to receive an Item list.
 
 import java.util.ArrayList;
 

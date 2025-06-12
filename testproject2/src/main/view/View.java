@@ -1,11 +1,10 @@
 package main.view;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import main.controller.*;
-import main.integration.*;
-import main.model.*;
+import main.integration.*; 	// Needs Discount class for printouts and Exception classes for exception handling
+import main.model.*;		// Needs Item and Sale classes for printouts
 
 public class View {
 
@@ -17,6 +16,10 @@ public class View {
 	 */
 	public View(Controller contr) {
 		this.controller = contr;
+		
+		// TotalRevenue-Observers are stored in the View layer and should be added from View to preserve MVC/encapsulation.
+		this.controller.addObserver(new TotalRevenueFileOutput());	
+		this.controller.addObserver(new TotalRevenueView());	
 	}
 
 
@@ -28,15 +31,16 @@ public class View {
 	 * Prints confirmation of starting a new Sale.
 	 */
 	public void printStartSale(){
-		System.out.println("\n\nNew Sale started at: " + LocalTime.now() +"\n");
+		System.out.println("\n\nNew Sale started at: " + controller.getSale().getTime() +"\n");
 	}
 	/**
 	 * A block of User Interface printouts supposed to be printed after every addItem operation. 
 	 * Prints Item information.
 	 * @param item - the Item to print info from
+	 * @param quantity - quantity that was added
 	 */
-	public void printAddItem(Item item){
-		System.out.println("Added "+ item.getQuantity() + " item(s) with itemID: " + item.getItemIdentifier());
+	public void printAddItem(Item item, int quantity){
+		System.out.println("Added "+ quantity + " item(s) with itemID: " + item.getItemIdentifier());
 		System.out.println("Item ID: " + item.getItemIdentifier());
 		System.out.println("Item description: " + item.getItemDescription());
 		System.out.println("Item price: " + item.getPrice() + " SEK");
@@ -57,6 +61,7 @@ public class View {
 	public void printGetDiscount(){
 		System.out.println("Eligible discounts found: " + controller.getSale().getDiscounts().size());
 
+		// Printout details of discount list.
 		ArrayList<Discount> discounts = controller.getSale().getDiscounts();
 		for(int i = 0; i<discounts.size(); i++){
 			System.out.println(discounts.get(i).getDiscountDescription());
@@ -68,7 +73,7 @@ public class View {
 	 * Prints confirmation of payment and updating of systems. 
 	 */
 	public void printPay(){
-		System.out.printf("Payment recieved: %.2f SEK\n", controller.getSale().getPaymentAmount());
+		System.out.printf("Payment received: %.2f SEK\n", controller.getSale().getPaymentAmount());
 		System.out.printf("Change returned: %.2f SEK\n", controller.getSale().getChangeAmount());
 
 		// Printout about updating external systems.
@@ -92,12 +97,14 @@ public class View {
         for(int i = 0; i<items.size(); i++){
 			Item a = items.get(i);
             itemListString += a.getItemDescription() + "   " + a.getQuantity() + " x " + a.getPrice() + "   " + a.getQuantity()*a.getPrice() + " SEK \n";
+			if(i == items.size() - 1){itemListString += "\n";}
         }
 		for(int i = 0; i<discounts.size(); i++){
 			discountListString += discounts.get(i).getDiscountDescription() + "\n";
+			if(i == discounts.size() - 1){discountListString += "\n";}
 		}
 		Sale b = controller.getSale();
-        return "\n-----------Receipt Start-----------\nTime of Sale: " + b.getTime() + "\n\n" + itemListString + "\n" + discountListString + "\nTotal: " + String.format("%.2f",b.getTotalPrice()) + " SEK \nVAT: " + String.format("%.2f",b.getTotalVAT())+ " SEK \n\nPayment: "+ String.format("%.2f",b.getPaymentAmount()) + " SEK\nChange: " + String.format("%.2f",b.getChangeAmount()) + " SEK\n------------Receipt End------------\n";
+        return "\n-----------Receipt Start-----------\nTime of Sale: " + b.getTime() + "\n\n" + itemListString + discountListString + "Total: " + String.format("%.2f",b.getTotalPrice()) + " SEK \nVAT: " + String.format("%.2f",b.getTotalVAT())+ " SEK \n\nPayment: "+ String.format("%.2f",b.getPaymentAmount()) + " SEK\nChange: " + String.format("%.2f",b.getChangeAmount()) + " SEK\n------------Receipt End------------\n";
     }
 	/**
      * Constructs and Prints receipt from View. Sends copy to PrinterHandler to be physically printed.
@@ -113,6 +120,8 @@ public class View {
 
 
 	////// User Visible Methods
+	/// Exceptions are currently caught in the Example runs instead of in the User methods.
+	/// This causes the Sale to be abandoned entirely from an exception rather than let a partial Sale take place.
 
 	/**
      * User-Method for starting a Sale and its related printouts.  
@@ -122,7 +131,6 @@ public class View {
 		// Prints confirmation of starting a Sale and the current time.
 		printStartSale();
 	}
-
 	/**
      * User-Method for adding an Item and its related printouts. Self-contained, as it should appear to a User.
 	 * @param itemIdentifier - 1,2,3 are valid, 1000 causes database exception
@@ -133,10 +141,9 @@ public class View {
 	public void addItemProcedure(int itemIdentifier, int quantity) throws ItemNotFoundException, DatabaseOfflineException{
 		Item addedItem = this.controller.addItem(itemIdentifier, quantity);
 		// Printouts to system.out - Confirms Item added, presents new total price.
-		printAddItem(addedItem);
+		printAddItem(addedItem, quantity);
 		printCurrentTotals();
 	}
-
 	/**
 	 * User-Method for getting Discounts and its related printouts.
 	 * @param customerID - 1000 causes exception
@@ -148,9 +155,8 @@ public class View {
 		printGetDiscount(); 
 		printCurrentTotals();
 	}
-
 	/**
-	 * User-Method for Payment, receipt, end-of-sale procedures.
+	 * User-Method for receving payment and printing receipt. 
 	 * @param amountPaid Payment amount recieved
 	 */
 	public void payProcedure(double amountPaid){
@@ -163,11 +169,14 @@ public class View {
 
 
 	////// Example Runs
+	/// Exceptions are currently caught in the Example runs instead of in the User methods.
+	/// This causes the Sale to be abandoned entirely from an exception rather than let a partial Sale take place.
 
 	/**
     * Example-run containing the procedures for 3 sales. 
 	* The 3 sales showcase the function of the TotalRevenue classes in printing the accumulated revenue to terminal and file.
 	* Sale 1 also shows the systems handling of adding multiple of the same item.  
+	* Aborts sale if exception thrown.
 	*/
 	public void exampleRunTotalRevenue(){
 		try{
@@ -183,12 +192,12 @@ public class View {
 
 			startSaleProcedure();
 			addItemProcedure(2, 47);
-			getDiscountProcedure(1002);
+			//getDiscountProcedure(1002);	// omit discounts to shorten printout
 			payProcedure(800);
 
 			startSaleProcedure();
 			addItemProcedure(3, 132);
-			getDiscountProcedure(1002);
+			//getDiscountProcedure(1002);	// omit discounts to shorten printout
 			payProcedure(200);
 		}
 		catch(ItemNotFoundException | DatabaseOfflineException exception){
@@ -198,6 +207,7 @@ public class View {
 	/**
     * Example-run containing the procedures for 1 sale. 
 	* Attempts to add a non-existent item, to show the ItemNotFoundException.
+	* Aborts sale when exception thrown.
 	*/
 	public void exampleRunItemNotFound(){
 		try{
@@ -213,6 +223,7 @@ public class View {
 	/**
     * Example-run containing the procedures for 1 sale. 
 	* Attempts to add an item with an identifier that causes the simulation of an offline Item Database, to show the DatabaseOfflineException.
+	* Aborts sale when exception thrown.
 	*/
 	public void exampleRunItemDatabase(){
 		try{
@@ -228,6 +239,7 @@ public class View {
 	/**
     * Example-run containing the procedures for 1 sale. 
 	* Attempts to find discounts for a Customer ID that causes the simulation of an offline Discount Database, to show the DatabaseOfflineException.
+	* Aborts sale when exception thrown.
 	*/
 	public void exampleRunDiscountDatabase(){
 		try{

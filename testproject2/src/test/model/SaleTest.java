@@ -68,10 +68,10 @@ public class SaleTest {
         assertEquals(0, testSale.getItems().size(), "New sale should have no item");
         testSale.addItem(Morot, 4);
         assertEquals(1, testSale.getItems().size(), "One item sale should have one item");
-        assertEquals(4, testSale.getItems().get(0).getQuantity(), "Quantity not matching");
+        assertEquals(4, testSale.getItems().get(0).getQuantity(), "Quantity not matching - 0 + 4 Morot");
         testSale.addItem(Morot, 5);
         assertEquals(1, testSale.getItems().size(), "One item sale should have one item");
-        assertEquals(9, testSale.getItems().get(0).getQuantity(), "Quantity not matching");
+        assertEquals(9, testSale.getItems().get(0).getQuantity(), "Quantity not matching - 0 + 4 + 5 Morot");
 
     }
 
